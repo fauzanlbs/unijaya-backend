@@ -18,10 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', 'API\UserController@login');
-Route::post('register', 'API\UserController@register');
-
+Route::post('login', 'API\AuthController@login');
+Route::post('register', 'API\AuthController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
-
+    Route::resource('user','API\UserController');
+    Route::post('user/import','API\UserController@import');
 });
