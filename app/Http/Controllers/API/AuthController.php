@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use App\Http\Requests\UserRequest;
 
 class AuthController extends Controller
 {
@@ -23,18 +22,10 @@ class AuthController extends Controller
         }
     }
 
-    public function register(Request $request)
+    public function register(UserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
+        $validated = $request->validated();
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);

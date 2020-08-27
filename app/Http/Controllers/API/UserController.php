@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -21,9 +22,9 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-
+        $validated = $request->validated();
     }
 
     public function show($id)
@@ -31,9 +32,9 @@ class UserController extends Controller
 
     }
 
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
-
+        $validated = $request->validated();
     }
 
     public function destroy($id)
@@ -49,7 +50,6 @@ class UserController extends Controller
 
     public function import()
     {
-
     }
 
     // IMPORT END
