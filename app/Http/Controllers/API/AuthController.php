@@ -4,17 +4,18 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
     public $successStatus = 200;
 
-    public function login()
+    public function login(Request $request)
     {
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
-            $user = Auth::user();
+        $user = User::where('email', $request->email)->first();
+        if (Hash::check($request->password, $user->password)) {
             $success['token'] =  $user->createToken('yuhu')->accessToken;
             return response()->json(['success' => $success], $this->successStatus);
         } else {
@@ -28,7 +29,7 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
+        $input['password'] = Hash::make($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('yuhu')->accessToken;
         $success['name'] =  $user->name;

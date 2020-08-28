@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\User;
-use Illuminate\Support\Facades\Auth;
-use Validator;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\ImportRequest;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -56,8 +56,10 @@ class UserController extends Controller
 
     // IMPORT START
 
-    public function import()
+    public function import(ImportRequest $request)
     {
+        $validated = $request->validated();
+        Excel::import(new UsersImport,$request->file('file'));
     }
 
     // IMPORT END
